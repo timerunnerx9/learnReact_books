@@ -20,7 +20,6 @@ function BookShow({ book, onDelete, onEdit }) {
   }
 
 
-
   let content = <h3>{book.title}</h3>
 
   if(showEdit){
