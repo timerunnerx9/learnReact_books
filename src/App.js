@@ -18,11 +18,6 @@ function App() {
     fetchBooks();
   },[]);
 
-  const deleteBookById = (id) => {
-  useEffect(async ()=>{
-    const response = await axios.get("http://localhost:3001/books");
-    setBooks(response.data);
-  },[])
 
   const deleteBookById = async (id) => {
     await axios.delete(`http://localhost:3001/books/${id}`);
@@ -47,10 +42,6 @@ function App() {
     setBooks(updatedBooks);
   };
 
-  const createBook = async (title) => {
-    const response = await axios.post("http://localhost:3001/books", {
-      title,
-    });
 
   const createBook = async (title) => {
     const response = await axios.post("http://localhost:3001/books", {
