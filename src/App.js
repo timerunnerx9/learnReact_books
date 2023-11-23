@@ -1,10 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import BookCreate from "./components/BookCreate";
 import BookList from "./components/BookList";
-import BookShow from "./components/BookShow";
+import axios from "axios";
+
 
 function App() {
+
+
   const [books, setBooks] = useState([]);
+
+  const fetchBooks = async () => {
+    const response = await axios.get("http://localhost:3001/books");
+    setBooks(response.data);
+  };
+
+  useEffect(()=>{
+    fetchBooks();
+  },[]);
 
   const deleteBookById = (id) => {
     const updatedBooks = books.filter((book) => {
@@ -14,31 +26,35 @@ function App() {
     setBooks(updatedBooks);
   };
 
-  const editBookById = (id, newTitle) =>{
-    const updatedBooks = books.map((book)=>{
-      if(book.id === id){
-        return {...book, title:newTitle};
+  const editBookById = (id, newTitle) => {
+    const updatedBooks = books.map((book) => {
+      if (book.id === id) {
+        return { ...book, title: newTitle };
       }
 
       return book;
     });
     setBooks(updatedBooks);
-  }
+  };
 
-  const createBook = (title) => {
+  const createBook = async (title) => {
+    const response = await axios.post("http://localhost:3001/books", {
+      title,
+    });
+
     const updatedBooks = [
-      ...books,
-      { id: Math.round(Math.random() * 1000), title: title },
+      ...books, response.data
     ];
 
     setBooks(updatedBooks);
+
   };
 
   return (
     <div className="app">
       <h1>Reading List</h1>
       <BookCreate onCreate={createBook} />
-      <BookList onDelete={deleteBookById} books={books} onEdit={editBookById}/>
+      <BookList onDelete={deleteBookById} books={books} onEdit={editBookById} />
     </div>
   );
 }
